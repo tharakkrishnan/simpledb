@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://www.thumbtack.com/challenges/simple-database -->
+<html lang="en" class="gr__thumbtack_com"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="Content-Style-Type" content="text/css"><meta http-equiv="Content-Script-Type" content="text/javascript"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>Simple Database Challenge - Thumbtack</title><meta property="fb:app_id" content="131357050011"><meta property="og:url" content="https://www.thumbtack.com/challenges/simple-database"><meta property="og:title" content="Simple Database Challenge - Thumbtack"><meta property="og:type" content="website"><meta property="og:site_name" content="Thumbtack"><link rel="image_src" href="https://static4.thumbtack.com/theme/images/thumbtack2.png"><meta property="og:image" content="https://static4.thumbtack.com/theme/images/thumbtack2.png"><meta name="omg:cute" href="https://static5.thumbtack.com/media/puppies/pup.jpg"><link rel="icon" href="https://www.thumbtack.com/favicon.ico"><link rel="stylesheet" type="text/css" media="all" href="./Simple Database Challenge - Thumbtack_files/icons-350665ef.css.gz"><link rel="stylesheet" type="text/css" media="all" href="./Simple Database Challenge - Thumbtack_files/core-0f55730c.css.gz"><link rel="stylesheet" type="text/css" media="all" href="./Simple Database Challenge - Thumbtack_files/position-ad2746de.css.gz"><script type="text/javascript" async="" src="./Simple Database Challenge - Thumbtack_files/airpr.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/fbds.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/conversion_async.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/quant.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/bat.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/tag"></script><script async="" src="./Simple Database Challenge - Thumbtack_files/tag.js"></script><script async="" src="./Simple Database Challenge - Thumbtack_files/analytics.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/jquery.min.js"></script><script type="text/javascript" src="./Simple Database Challenge - Thumbtack_files/foundation_bundle-5eb5b0a6.js.gz"></script><script type="text/javascript">
+            _createTTNamespace(
+                false,
+                [],
+                {"primo":true},
+                []
+            );
+        </script><script type="text/javascript">
+            TT_FB_KEY = "131357050011";
+            TT_MOBILE = false;
+        </script></head><body class="primo  box-shadow multiple-backgrounds svg" itemscope="" itemtype="http://schema.org/WebPage"><div global-header="" class="glorious-header
+    " data-section="header"><div class="wrapper "><div class="row header-row
+            "><div class="header-logo"><a href="https://www.thumbtack.com/"><img src="./Simple Database Challenge - Thumbtack_files/thumbtack_orange_152x29.png" width="152" height="29" alt="Thumbtack"></a></div><div class="header-middle-container"></div><div class="header-navigation "><a href="https://www.thumbtack.com/pro" rel="nofollow" class="gray-link">Join as a Pro</a><a href="https://www.thumbtack.com/choose-account" rel="nofollow" class="gray-link">Sign Up</a><a href="https://www.thumbtack.com/login" rel="nofollow" class="gray-link log-in-link">Log In</a></div></div></div></div><div class="glorious-navigation-wrapper
+        "><div class="glorious-navigation
+        "><div class="wrapper browse-wrapper" data-browse-container=""><ul class="navigation-row"><li class="about"><a href="https://www.thumbtack.com/about"><span>About</span></a></li><li class="jobs active"><a href="https://www.thumbtack.com/jobs"><span>Jobs</span></a></li><li class="team"><a href="https://www.thumbtack.com/team/"><span>Team</span></a></li><li class="blog"><a href="https://www.thumbtack.com/blog"><span>Blog</span></a></li><li class="team/engineering"><a href="https://www.thumbtack.com/team/engineering"><span>Engineering</span></a></li><li class="press"><a href="https://www.thumbtack.com/press"><span>Press</span></a></li></ul></div></div></div><script type="text/javascript">
+    $(document).ready(function() {
+        if (TT.env.primo) {
+            TT.initPrimoHeader();
+        }
+    });
+</script>
+        
+    <div class="wrapper position-section">
+        <div class="row">
+
+                        <div class="column-14 position">
+
+                <h1 class="title">
+                    <span class="icon-font icon-font-tools" aria-hidden="true"></span>
+                    Simple Database Challenge
+                </h1>
+
+                <p class="text">
+                    In the Simple Database problem, you'll implement an in-memory database similar
+                    to Redis. For simplicity's sake, instead of dealing with multiple clients and
+                    communicating over the network, your program will receive commands via standard
+                    input (stdin), and should write appropriate responses to standard output
+                    (stdout).
+                </p>
+
+                <h3 class="subheading">Guidelines</h3>
+
+                <ul class="bullet-point-section">
+                    <li>
+                        <p>
+                            This problem should take you between 30 and 90 minutes.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            We recommend that you use a high-level language, like Python, Go,
+                            Haskell, Ruby, or Java. We're much more interested in seeing clean
+                            code and good <em>algorithmic</em> performance than raw throughput.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            It is very helpful to the engineers who grade these challenges if you
+                            reduce external dependencies, make compiling your code as simple as
+                            possible, and include instructions for compiling and/or running your
+                            code directly from the command line, without the use of an IDE.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Your submission must comply with the
+                            <a href="https://www.thumbtack.com/challenges/simple-database#io">input/output formats</a> and
+                            <a href="https://www.thumbtack.com/challenges/simple-database#performance">performance requirements</a> specified below.
+                        </p>
+                    </li>
+                </ul>
+
+                <h3 class="subheading">Data Commands</h3>
+
+                <p class="text">
+                    Your database should accept the following commands:
+                </p>
+
+                <ul class="bullet-point-section simpledb-commands">
+                    <li>
+                        <p>
+                            <code class="command">SET <var>name</var> <var>value</var></code>
+                            –
+                            Set the variable <var>name</var> to the value <var>value</var>.
+                            Neither variable names nor values will contain spaces.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">GET <var>name</var></code>
+                            –
+                            Print out the value of the variable <var>name</var>, or
+                            <code>NULL</code> if that variable is not set.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">UNSET <var>name</var></code>
+                            –
+                            Unset the variable <var>name</var>, making it just like
+                            that variable was never set.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">NUMEQUALTO <var>value</var></code>
+                            –
+                            Print out the number of variables that are currently set to
+                            <var>value</var>. If no variables equal that value, print
+                            <code>0</code>.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">END</code>
+                            –
+                            Exit the program. Your program will always receive this as its last
+                            command.
+                        </p>
+                    </li>
+                </ul>
+
+                <p class="text">
+                    Commands will be fed to your program one at a time, with each command on its own
+                    line. Any output that your program generates should end with a newline
+                    character. Here are some example command sequences:
+                </p>
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    SET ex 10<br>
+                                                    GET ex<br>
+                                                    UNSET ex<br>
+                                                    GET ex<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    10<br>
+                                                    <br>
+                                                    NULL<br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    SET a 10<br>
+                                                    SET b 10<br>
+                                                    NUMEQUALTO 10<br>
+                                                    NUMEQUALTO 20<br>
+                                                    SET b 30<br>
+                                                    NUMEQUALTO 10<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    <br>
+                                                    2<br>
+                                                    0<br>
+                                                    <br>
+                                                    1<br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                <h3 class="subheading">Transaction Commands</h3>
+
+                <p class="text">
+                    In addition to the above data commands, your program should also support
+                    database transactions by also implementing these commands:
+                </p>
+
+                <ul class="bullet-point-section simpledb-commands">
+                    <li>
+                        <p>
+                            <code class="command">BEGIN</code>
+                            –
+                            Open a new transaction block. Transaction blocks can be nested; a
+                            <code>BEGIN</code> can be issued inside of an existing block.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">ROLLBACK</code>
+                            –
+                            Undo all of the commands issued in the <em>most recent</em> transaction
+                            block, and close the block. Print nothing if successful, or print
+                            <code>NO TRANSACTION</code> if no transaction is in progress.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code class="command">COMMIT</code>
+                            –
+                            Close <em>all</em> open transaction blocks, permanently applying
+                            the changes made in them. Print nothing if successful, or print
+                            <code>NO TRANSACTION</code> if no transaction is in progress.
+                        </p>
+                    </li>
+                </ul>
+
+                <p class="text">
+                    Any data command that is run outside of a transaction block should commit
+                    immediately. Here are some example command sequences:
+                </p>
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    BEGIN<br>
+                                                    SET a 10<br>
+                                                    GET a<br>
+                                                    BEGIN<br>
+                                                    SET a 20<br>
+                                                    GET a<br>
+                                                    ROLLBACK<br>
+                                                    GET a<br>
+                                                    ROLLBACK<br>
+                                                    GET a<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    <br>
+                                                    10<br>
+                                                    <br>
+                                                    <br>
+                                                    20<br>
+                                                    <br>
+                                                    10<br>
+                                                    <br>
+                                                    NULL<br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    BEGIN<br>
+                                                    SET a 30<br>
+                                                    BEGIN<br>
+                                                    SET a 40<br>
+                                                    COMMIT<br>
+                                                    GET a<br>
+                                                    ROLLBACK<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    40<br>
+                                                    NO TRANSACTION<br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    SET a 50<br>
+                                                    BEGIN<br>
+                                                    GET a<br>
+                                                    SET a 60<br>
+                                                    BEGIN<br>
+                                                    UNSET a<br>
+                                                    GET a<br>
+                                                    ROLLBACK<br>
+                                                    GET a<br>
+                                                    COMMIT<br>
+                                                    GET a<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    <br>
+                                                    50<br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    NULL<br>
+                                                    <br>
+                                                    60<br>
+                                                    <br>
+                                                    60<br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                        <table class="simpledb-example">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="input">
+                                                    SET a 10<br>
+                                                    BEGIN<br>
+                                                    NUMEQUALTO 10<br>
+                                                    BEGIN<br>
+                                                    UNSET a<br>
+                                                    NUMEQUALTO 10<br>
+                                                    ROLLBACK<br>
+                                                    NUMEQUALTO 10<br>
+                                                    COMMIT<br>
+                                                END<br>
+                    </td>
+                    <td class="output">
+                                                    <br>
+                                                    <br>
+                                                    1<br>
+                                                    <br>
+                                                    <br>
+                                                    0<br>
+                                                    <br>
+                                                    1<br>
+                                                    <br>
+                                                <br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+
+                <h3 class="subheading" id="io">Input and Output Format</h3>
+                <p class="text">
+                    Your program should expect input from standard input (stdin) and handle EOF.
+                    Below are two examples of ways we might test your program.
+                </p>
+
+                <ul class="bullet-point-section">
+                    <li>
+                        <p>
+                            Pass a file of commands to standard input:
+                        </p>
+                        <p>
+                            <img src="./Simple Database Challenge - Thumbtack_files/io_file.gif">
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Run the program interactively:
+                        </p>
+                        <p>
+                            <img src="./Simple Database Challenge - Thumbtack_files/io_interactive.gif">
+                        </p>
+                        <p>
+                            The gray text is what we've typed in to the program and the red text
+                            is the program output. Please note that you do <em>not</em> need to
+                            implement any sort of text coloring. The different colors shown here are
+                            merely to help you distinguish between input and output.
+                        </p>
+                    </li>
+                </ul>
+
+                <h3 class="subheading" id="performance">Performance Requirements</h3>
+
+                <ul class="bullet-point-section simpledb-commands">
+                    <li>
+                        <p>
+                            All of the following commands
+                            <code class="command">BEGIN</code>,
+                            <code class="command">GET</code>,
+                            <code class="command">SET</code>,
+                            <code class="command">UNSET</code>, and
+                            <code class="command">NUMEQUALTO</code>
+                            should have an average-case runtime of
+                            <i>O(log N)</i> or better, where <i>N</i> is the total number
+                            of variables stored in the database.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            The vast majority of transactions will only update a small number of
+                            variables. Accordingly, your solution should be efficient about how much
+                            memory each transaction uses.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+                    </div>
+    </div>
+
+<div class="wrapper footer footer-wrapper"><div class="footer-copyright"><p class="copyright">
+            © 2015 Thumbtack, Inc. All Rights Reserved •
+            <a href="https://www.thumbtack.com/privacy" target="_blank">Privacy Policy</a> •
+            <a href="https://www.thumbtack.com/terms" target="_blank">Terms of Use</a></p></div></div><script src="./Simple Database Challenge - Thumbtack_files/bundle-2e3f1e51.js.gz"></script><script type="text/javascript">
+        TT.domReady(function() {
+            TT.loggedin = false;
+
+            
+            
+            
+                            $(document).ready(function() {
+                    $.post('/ajax/responsiveness', {key: "l9kts0qgqss6rkcb9t3hb7ajlvk8otomqcuuklrbf71rpvhjs6m" }
+                                            );
+                });
+            
+                    });
+    </script><script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-6981433-1', 'auto');
+            ga('send', 'pageview');
+
+            if (window.performance && window.performance.timing) {
+                $(document).ready(function(){
+                    var scriptCompleteTime = Date.now() - window.performance.timing.navigationStart;
+                    var scriptingTime = Date.now() - window.performance.timing.domInteractive;
+                    ga("send", "timing", "javascript", "Initial JS Complete", scriptCompleteTime);
+                    ga("send", "timing", "javascript", "Initial JS Execution Time", scriptingTime);
+                });
+            }
+        </script><script type="text/javascript">
+                var signalCoData = {};
+        
+        (function () {
+            var tagjs = document.createElement("script");
+            var s = document.getElementsByTagName("script")[0];
+            tagjs.async = true;
+            tagjs.src = "//s.btstatic.com/tag.js#site=GYp4tcM";
+            s.parentNode.insertBefore(tagjs, s);
+        })();
+    </script><noscript>&lt;iframe src="//s.thebrighttag.com/iframe?c=GYp4tcM" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"&gt;&lt;/iframe&gt;</noscript><div id="preload"></div>
+      
+      <img style="display: none !important;" src="https://api.nanigans.com/event.php?app_id=49780&type=visit&name=landing"><img height="1" width="1" alt="" src="./Simple Database Challenge - Thumbtack_files/saved_resource"><div style="width:0px; height:0px; display:none; visibility:hidden;" id="batBeacon0.537563796620816"><img style="width:0px; height:0px; display:none; visibility:hidden;" id="batBeacon0.16043492639437318" width="0" height="0" src="./Simple Database Challenge - Thumbtack_files/0"><img style="width:0px; height:0px; display:none; visibility:hidden;" id="batBeacon0.49457455263473094" width="0" height="0" src="./Simple Database Challenge - Thumbtack_files/0(1)"></div></body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
