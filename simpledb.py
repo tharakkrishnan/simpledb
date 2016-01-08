@@ -35,29 +35,54 @@ import sys, cmd
 
 class DB(cmd.Cmd):
 	def __init__(self, debug=0):
-		self.data = {}
+		self.data = {}		
 		self.stack=[]
+		self.values={}	
+		self.vstack=[]	
 		self.debug=debug
 		cmd.Cmd.__init__(self)
 		cmd.Cmd.prompt=""
 		
 	
 	def __set__(self, name, value):
-		if self.stack:
+		if self.stack and self.vstack:
+			if self.stack[len(self.stack)-1].has_key(name):
+				self.vstack[len(self.vstack)-1][self.stack[len(self.stack)-1][name]] -=1
+			if not self.vstack[len(self.vstack)-1].has_key(value):
+				self.vstack[len(self.vstack)-1][value]=0
+			self.vstack[len(self.vstack)-1][value] +=1
+			
 			self.stack[len(self.stack)-1][name]=value
 		else:
+			if self.data.has_key(name):
+				if self.values.has_key(self.data[name]):
+					self.values[self.data[name]] -=1
+			
 			self.data[name]=value
+				
+			if not self.values.has_key(value):
+				self.values[value]=0
+				
+			self.values[value] +=1
+
+			
 	
 	def __get__(self, name):
 			try:
-				return self.__parse_db__()[name]
+				r =self.__parse_db__()[name]
 			except:
 				return "NULL"
+			return r
 								
 	def __unset__(self, name):
-			if self.stack:
+			if self.stack and self.vstack:
+				if self.__get__(name) != "NULL":
+					self.vstack[len(self.vstack)-1][self.__get__(name)] =-1
 				self.stack[len(self.stack)-1][name] = "NULL"
 			else:
+				self.values[self.data[name]] -=1
+				if self.values[self.data[name]]==0:
+					del self.values[self.data[name]]
 				del self.data[name]
 				
 	def __parse_db__(self):
@@ -66,23 +91,42 @@ class DB(cmd.Cmd):
 			d.update(k)
 		return d
 	
+	def __parse_cnt__(self):
+		d = self.values.copy()
+		for k in self.vstack:
+			for (l,m) in k.iteritems():
+				print l
+				if d.has_key(l):
+					d[l]+=k[l]
+				else:
+					d[l]=k[l]
+				
+		return d
+
+	
 	def __numequalto__(self, value):
-		d = self.__parse_db__()
-		return len ([k for (k,v) in d.iteritems() if v==value])
+		d = self.__parse_cnt__()
+		if d.has_key(value):
+			return d[value]
+		else:
+			return 0
 				
 	def __begin__(self):
 		self.stack.append({})
+		self.vstack.append({})
 		
 	def __rollback__(self):
-		if self.stack:
+		if self.stack and self.vstack:
 			self.stack.pop()
+			self.vstack.pop()
 		else:
 			print "NO TRANSACTION"
 	
 	def __commit__(self):
-		if self.stack:
+		if self.stack and self.vstack:
 			stack = self.stack
 			self.stack=[]
+			self.vstack=[]
 			for k in stack:
 				for (l,m) in k.iteritems():	
 					if(m=="NULL"):
@@ -92,10 +136,15 @@ class DB(cmd.Cmd):
 		else:
 			print "NO TRANSACTION"
 							
+	def __clear__(self):
+		self.stack=[]
+		self.vstack=[]
+		self.values={}
+		self.data={}
+		
+		
 	def __end__(self):
 		sys.exit(0)
-
-
 		
 	def __parse(self, arg):
 		return tuple( arg.split())
@@ -107,17 +156,17 @@ class DB(cmd.Cmd):
 			raise
 		else:
 			pass
-
-
 	
 	def do_GET(self, arg):
 		"""GET name 			
 		Print out the value of the variable name, or NULL if that variable is not set.
 		"""
 		try:
-			print self.__get__(*self.__parse(arg))
+			r = self.__get__(*self.__parse(arg))
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		print r
+		return r
 	
 	def do_SET(self, arg):
 		"""SET name value
@@ -127,6 +176,7 @@ class DB(cmd.Cmd):
 			self.__set__(*self.__parse(arg))
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		return None
 	
 	def do_UNSET(self, arg):
 		"""UNSET name
@@ -136,6 +186,7 @@ class DB(cmd.Cmd):
 			self.__unset__(*self.__parse(arg))
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		return None
 	
 	def do_NUMEQUALTO(self, arg):
 		"""NUMEQUALTO value
@@ -143,9 +194,11 @@ class DB(cmd.Cmd):
 		If no variables equal that value, print 0.
 		"""
 		try:
-			print self.__numequalto__(*self.__parse(arg))
+			r = self.__numequalto__(*self.__parse(arg))
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		print r
+		return r
 
 	
 	def do_BEGIN(self, arg):
@@ -157,6 +210,8 @@ class DB(cmd.Cmd):
 			self.__begin__()
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		
+		return None
 
 	def do_COMMIT(self, arg):
 		"""COMMIT
@@ -167,6 +222,8 @@ class DB(cmd.Cmd):
 			self.__commit__()
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		
+		return None
 
 	
 	def do_ROLLBACK(self, arg):
@@ -178,6 +235,8 @@ class DB(cmd.Cmd):
 			self.__rollback__()
 		except Exception as exception:
 			self.__handle_except(exception, False)
+		
+		return None
 
 	
 	def do_END(self, arg):
@@ -188,16 +247,28 @@ class DB(cmd.Cmd):
 			self.__end__()
 		except Exception as exception:
 			self.__handle_except(exception, False)
-
+			
+		return None
+		
+	def do_CLEAR(self, arg):
+		"""CLEAR
+		Clears the entire database.Useful for testing.
+		"""
+		try:
+			self.__clear__()
+		except Exception as exception:
+			self.__handle_except(exception, False)
+			
+		return None
 	
 	def do_EOF(self, line):
 		return True
 		
 	def postcmd(self, stop, line):	
 		if self.debug:
-			print "debug\tCMD:%s\tDB:%s\tSTACK:%s"%(line, self.data, self.stack)
+			print "debug\tCMD:%s\tDB:%s\tSTACK:%s\tVSTACK:%s\tVALUES:%s"%(line, self.data, self.stack,self.vstack, self.values)
 		
 if __name__ == "__main__":
-	db=DB()
+	db=DB(debug=1)
 	db.cmdloop()
 		
