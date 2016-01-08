@@ -269,6 +269,6 @@ class DB(cmd.Cmd):
 			print "debug\tCMD:%s\tDB:%s\tSTACK:%s\tVSTACK:%s\tVALUES:%s"%(line, self.data, self.stack,self.vstack, self.values)
 		
 if __name__ == "__main__":
-	db=DB(debug=1)
+	db=DB(debug=0)
 	db.cmdloop()
 		
